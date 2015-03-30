@@ -8,7 +8,7 @@
 	}
 	session_start();
 	if($_SESSION['user']==NULL)									// If user is trying to access a logged in dependent page- Redirect to login page
-		header("Location: /login.php");
+		header("Location: login.php");
 	$user=$_SESSION['user'];									// Set's the logged in user for the page
 	//bool date_default_timezone_set ( 'EST' )
 	$currentmonth = date('n');

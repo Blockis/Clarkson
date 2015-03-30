@@ -5,11 +5,11 @@
 * Global Variables Across Site		*
 ************************************/
 
-$title="EE368 Demo";
+$title="Event Calendar";
 
 $DB_HOST="localhost";
-$DB_USER="ee468";
-$DB_PASS="password";
+$DB_USER="comm444";
+$DB_PASS="student";
 $DB_DB="calendar";
 
 ?>

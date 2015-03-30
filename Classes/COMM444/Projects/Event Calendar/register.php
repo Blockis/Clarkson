@@ -49,7 +49,7 @@
 						$_SESSION['uid']=mysqli_num_rows(mysqli_query($link, "SELECT * FROM User;"));
 						$_SESSION['user']=$accountName;						// Set logged in user
 						mysqli_free_result($result);
-						header("Location: /home.php");	// redirects page
+						header("Location: home.php");	// redirects page
 					}
 				} // closing else username didn't already exist
 			} // closing if password fields
@@ -75,7 +75,6 @@
 				<tr><td align="right"><font color="red"><?php echo $globalPassError;?></font></td></tr> 
 				<tr><td>Password:</td><td><input type="password" name="password"></td></tr>
 				<tr><td>Confirm Password:</td><td><input type="password" name="confirmPassword"></td></tr> 
-				<tr><td><i>(Optional)</i> Device ID:</td><td><input type="text" name="deviceID"></td></tr> 
 				<tr><td></td><td><input type="submit" name="submit" value="Submit"></td></tr><tr><td align="right"><font color="red"><?php echo $globalGeneralError;?></font></td></tr> 
 			</table> 
 		</form>
