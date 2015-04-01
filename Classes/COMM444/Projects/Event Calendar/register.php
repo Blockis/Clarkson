@@ -1,56 +1,40 @@
 <?php
 	include ('globals.php');
-
 	$globalUsernameError="";
 	$globalPassError="";
 	$globalGeneralError="";
 	if(isset($_POST['submit'])){
 		if($_POST['accountName']){
 			if($_POST['password']==$_POST['confirmPassword'] && $_POST['password']!=""){
-				$link = mysqli_connect($DB_HOST, $DB_USER, $DB_PASS, $DB_DB);
-
 				/* check connection */
-				if (mysqli_connect_errno()) {
-					printf("Connect failed: %s\n", mysqli_connect_error());
+				if (!$conn){
+					printf("Connection to database failed.\n");
 					exit();
 				}
 				
-				$accountName=$_POST['accountName'];
-				$queryUserCheck="SELECT * FROM User WHERE user_name='$accountName';";
-				
-				$resultUserCheck=mysqli_query($link,$queryUserCheck);
-				//if ($result = mysqli_query($link, "SELECT Name FROM City LIMIT 10")) {
-				//	printf("Select returned %d rows.\n", mysqli_num_rows($result));
-
-					/* free result set */
-					//mysqli_free_result($result);
-				//}
-				
-				//$resultUserCheck=mysql_query($queryUserCheck,$link);
-				if(mysql_num_rows($resultUserCheck)>0){						// If result returns anything other than 0, user already exists
-					$globalGeneralError="This user already exists. Please pick another.\n";
-					mysqli_free_result($resultUserCheck);
-				}else{
-					mysqli_free_result($resultUserCheck);
-					$deviceID=$_POST['deviceID'];
-					$accountName=$_POST['accountName'];
-					$password=$_POST['password'];
-					$query = "INSERT INTO User(user_ID,password,user_name) VALUES ('DEFAULT','$password','$accountName');";
-					
-					$result=mysqli_query($link,$query);
-					
-					//$result = mysql_query($query,$link);
-					if(!$result)											// Check to see if there were any errors with inserting
-						$globalGeneralError="An error has occurred while trying to register. Please try again.";
-					else{
-						$globalUsernameError="";
-						$globalPassError="";
-						session_start();									// Start session, save login
-						$_SESSION['uid']=mysqli_num_rows(mysqli_query($link, "SELECT * FROM User;"));
-						$_SESSION['user']=$accountName;						// Set logged in user
-						mysqli_free_result($result);
-						header("Location: home.php");	// redirects page
-					}
+				$accountName = $_POST['accountName'];
+				$result = $conn->prepare("SELECT * FROM User WHERE user_name=:Us3Rn4M3;");
+				$result->bindParam(':Us3Rn4M3', $accountName);
+				$result->execute();
+				$rows = $result->fetch(PDO::FETCH_NUM);
+				if($rows > 0){ // If we get any rows, the user exists already
+					$globalGeneralError="This user already exists.  Please pick another username.\n";
+				} else {
+					$accountName = $_POST['accountName'];
+					$password = $_POST['password'];
+					// Syntax on binding param when INSERTing?
+					//$insertUser->bindParam(':Pa55W0rD',$password);
+					//$insertUser->bindParam(':Us3Rn4M3',$accountName);
+					$insertUser = $conn->prepare("INSERT INTO User(user_ID,password,user_name) VALUES ('DEFAULT','$password','$accountName');");
+					$insertUser->execute();
+					// We need a check to see if user was actually inserted into the database.
+					$globalUsernameError="";
+					$globalPassError="";
+					$uid = $conn->prepare("SELECT * FROM User;");
+					$uid->execute();				
+					$_SESSION['uid']=$uid->fetch(PDO::FETCH_NUM);
+					$_SESSION['user']=$accountName;	// Set logged in user
+					header("Location: home.php");	// redirects page
 				} // closing else username didn't already exist
 			} // closing if password fields
 			else
@@ -62,10 +46,11 @@
 ?>
 <html>
 	<header>
-	<title>Registration</title>
+		<title>Registration</title>
+		<link rel="stylesheet" type="text/css" href="style.css">
 	</header>
 	<body>
-		<div style="width: 500px; height: auto; border: 1px solid #D3D3D3; margin: auto; padding: 10px;">
+		<div id="container">
 		<b><h3><?php echo $title; ?> | Registration</h3></b>
 		<form action="<?php echo $_SERVER['PHP_SELF']; ?>" method="post">
 			<table> 
