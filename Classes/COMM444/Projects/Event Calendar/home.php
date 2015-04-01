@@ -1,9 +1,9 @@
 <?php
 	include ('globals.php');
 	session_start();
-	if($_SESSION['user']==NULL)									// If user is trying to access a logged in dependent page- Redirect to login page
+	if($_SESSION['user']==NULL) // Prevent un-authorized entry
 		header("Location: login.php");
-	$user=$_SESSION['user'];									// Set's the logged in user for the page
+	$user=$_SESSION['user']; // Set's the logged in user
 	if(isset($_POST['logout'])){
 		session_unset($_SESSION['user']);
 		session_destroy();
@@ -16,36 +16,17 @@
 	<head>
 		<head>
 			<title>Home</title>
-			<style>
-				a,a:visited{
-					color: #80D9FF;
-					text-decoration: none;
-				}
-				a:hover{
-					color: #00B2FF;
-					text-decoration: none;
-				}
-				a:active{
-					color: #00B2FF;
-					text-decoration: none;
-				}
-				.linkButton { 
-					 background: none;
-					 border: none;
-					 color: #0066ff;
-					 text-decoration: underline;
-					 cursor: pointer; 
-				}
-			</style>
+			<link rel="stylesheet" type="text/css" href="style.css">
 		</head>
 	</head>
 	<body>
-		<div style="width: 500px; height: auto; border: 1px solid #D3D3D3; margin: auto; padding: 10px;">
+		<div id="container">
 			<b><h3><?php echo $title; ?> | Home</h3></b><div style="float: right;">Welcome back, <?php echo $user; ?>!</div>	
 			<br />
 			<?php include ('navigation.php'); ?>
 			<br />
-			Welcome to the <?php echo $title; ?> website!  This page serves as a hub for information regarding our calendar platform.
+			Welcome to the <?php echo $title; ?>!  This page serves as a hub for information regarding our calendar platform.
 		</div>
 	</body>
 </html>
+
