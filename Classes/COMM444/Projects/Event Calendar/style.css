@@ -1,0 +1,26 @@
+a,a:visited{
+	color: #80D9FF;
+	text-decoration: none;
+}
+a:hover{
+	color: #00B2FF;
+	text-decoration: none;
+}
+a:active{
+	color: #00B2FF;
+	text-decoration: none;
+}
+.linkButton{ 
+	 background: none;
+	 border: none;
+	 color: #0066ff;
+	 text-decoration: underline;
+	 cursor: pointer; 
+}
+#container{
+	width: 500px;
+	height: auto;
+	border: 1px solid #D3D3D3;
+	margin: auto;
+	padding: 10px;
+}
