@@ -22,7 +22,14 @@
 					$rows = $result->fetch(PDO::FETCH_NUM);
 					if($rows > 0){
 						// GET THE USER_ID
+						
+						$getUID = $conn->prepare("SELECT user_ID FROM User WHERE user_name=:Us3Rn4M3");
+						$getUID->bindParam(':Us3Rn4M3', $account);
+						$getUID->execute();
+						//print($getUID);
+						$r = $getUID->fetch(PDO::FETCH_ASSOC);
 						//$_SESSION['uid']=$row['user_ID'];
+						$_SESSION['uid']=$r['user_ID'];
 						$_SESSION['user']=$account;
 						$_SESSION['month']=date('n');
 						$_SESSION['year']=date('Y');

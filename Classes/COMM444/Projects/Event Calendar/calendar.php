@@ -1,16 +1,10 @@
 <?php
 	include ('globals.php');
 	error_reporting(E_ERROR | E_PARSE);
-	$con1=mysqli_connect($DB_HOST,$DB_USER,$DB_PASS,$DB_DB);
-	if (mysqli_connect_errno())
-	{
-	  echo "Failed to connect to MySQL: " . mysqli_connect_error();
-	}
 	session_start();
-	if($_SESSION['user']==NULL)									// If user is trying to access a logged in dependent page- Redirect to login page
+	if($_SESSION['user']==NULL) // If user is trying to access a logged in dependent page- Redirect to login page
 		header("Location: login.php");
-	$user=$_SESSION['user'];									// Set's the logged in user for the page
-	//bool date_default_timezone_set ( 'EST' )
+	$user=$_SESSION['user']; // Set's the logged in user for the page
 	$currentmonth = date('n');
 	$currentyear = date('Y');
 	if($_SESSION['month']==NULL){
@@ -83,7 +77,7 @@
 			
 			//print calendar based on SESSION variables
 			echo '<h3>'. $months[$_SESSION['month']-1] .' '. $_SESSION['year'].'</h3>';
-			echo draw_calendar($_SESSION['month'],$_SESSION['year'],$con1);
+			echo draw_calendar($_SESSION['month'],$_SESSION['year'],$conn);
 			//buttons to move around
 			echo '<form method="post">
 				<br />
@@ -113,7 +107,7 @@
 			/* bringing the controls together */
 			//$controls = '<form method="get">'.$select_month_control.$select_year_control.' <input type="submit" name="submit" value="Go" />      '.$previous_month_link.'     '.$next_month_link.' </form>';
 			/* draws a calendar */
-			function draw_calendar($month,$year,$con1){
+			function draw_calendar($month,$year,$conn){
 				/* draw table */
 				$calendar = '<table cellpadding="0" cellspacing="0" class="calendar">';
 				/* table headings */
@@ -143,23 +137,36 @@
 						
 						/* MySQL Query For ALL Events On This Day */
 
-						
+						//$queryEvents = $conn->prepare("");						
 						if($_SESSION['month'] < 10){
 							if($list_day < 10){
-								$event_sql="SELECT * FROM Event WHERE user_ID=" . $_SESSION['uid'] . " AND date LIKE '" . $_SESSION['year'] . "-0" . $_SESSION['month'] . "-0" . $list_day . " %'";
+								//$event_sql="SELECT * FROM Event WHERE user_ID=" . $_SESSION['uid'] . " AND date LIKE '" . $_SESSION['year'] . "-0" . $_SESSION['month'] . "-0" . $list_day . " %'";
+								$q = $conn->prepare("SELECT * FROM Event WHERE user_ID=" . $_SESSION['uid'] . " AND date LIKE '" . $_SESSION['year'] . "-0" . $_SESSION['month'] . "-0" . $list_day . " %'");
+								//$r = $q->execute();
 							} else {
-								$event_sql="SELECT * FROM Event WHERE user_ID=" . $_SESSION['uid'] . " AND date LIKE '" . $_SESSION['year'] . "-0" . $_SESSION['month'] . "-" . $list_day . " %'";
+								//$event_sql="SELECT * FROM Event WHERE user_ID=" . $_SESSION['uid'] . " AND date LIKE '" . $_SESSION['year'] . "-0" . $_SESSION['month'] . "-" . $list_day . " %'";
+								$q = $conn->prepare("SELECT * FROM Event WHERE user_ID=" . $_SESSION['uid'] . " AND date LIKE '" . $_SESSION['year'] . "-0" . $_SESSION['month'] . "-" . $list_day . " %'");
 							}
 						} else {
 							if($list_day < 10){
-								$event_sql="SELECT * FROM Event WHERE user_ID=" . $_SESSION['uid'] . " AND date LIKE '" . $_SESSION['year'] . "-" . $_SESSION['month'] . "-0" . $list_day . " %'";
+								//$event_sql="SELECT * FROM Event WHERE user_ID=" . $_SESSION['uid'] . " AND date LIKE '" . $_SESSION['year'] . "-" . $_SESSION['month'] . "-0" . $list_day . " %'";
+								$q = $conn->prepare("SELECT * FROM Event WHERE user_ID=" . $_SESSION['uid'] . " AND date LIKE '" . $_SESSION['year'] . "-" . $_SESSION['month'] . "-0" . $list_day . " %'");
 							} else {
-								$event_sql="SELECT * FROM Event WHERE user_ID=" . $_SESSION['uid'] . " AND date LIKE '" . $_SESSION['year'] . "-" . $_SESSION['month'] . "-" . $list_day . " %'";
+								//$event_sql="SELECT * FROM Event WHERE user_ID=" . $_SESSION['uid'] . " AND date LIKE '" . $_SESSION['year'] . "-" . $_SESSION['month'] . "-" . $list_day . " %'";
+								$q = $conn->prepare("SELECT * FROM Event WHERE user_ID=" . $_SESSION['uid'] . " AND date LIKE '" . $_SESSION['year'] . "-" . $_SESSION['month'] . "-" . $list_day . " %'");
 							}
 						}
-						$day_events = mysqli_query($con1, $event_sql) or die('Couldn\'t Query The Database!');
-						
-						while ($row = mysqli_fetch_assoc($day_events)) {
+
+						$q->execute();
+						//$day_events = mysqli_query($con1, $event_sql) or die('Couldn\'t Query The Database!');
+						//$dayEvents = $conn->prepare
+						/*while ($row = mysqli_fetch_assoc($day_events)) {
+							$tmp_time = explode(" ", $row['date']);
+							$time=$tmp_time[1]; // So now we have the ##:## time!
+							$calendar.='<p><b>'.$time.'</b><br /><i><span style="padding-left: 8px;">'.$row['description'].'</span></i></p>';
+						}*/
+
+						while($row = $q->fetch(PDO::FETCH_ASSOC)){
 							$tmp_time = explode(" ", $row['date']);
 							$time=$tmp_time[1]; // So now we have the ##:## time!
 							$calendar.='<p><b>'.$time.'</b><br /><i><span style="padding-left: 8px;">'.$row['description'].'</span></i></p>';
