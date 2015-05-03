@@ -1,0 +1,183 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<style type="text/css">
+
+body {
+	background-color: lightgray;
+}
+
+.contain {
+	width: 900px;
+	height: 600px;
+	padding: auto;
+	margin: auto;
+	border: 1px solid red;
+	overflow: hidden;
+	background-color: white;
+}
+
+.howto {
+	width: 900px;
+	height: 600px;
+	padding: auto;
+	margin: auto;
+	background-color: lightgray;
+}
+
+#block {
+	visibility: hidden;
+}
+
+.red {
+	width: 50px;
+	height: 50px;
+	background-color: #ff0000;
+}
+
+#start {
+
+}
+
+#begin {
+	padding-top: 100px;
+	margin: auto;
+}
+
+#hits {
+	padding-top: 4px;
+	margin: auto;
+	color: white;
+}
+
+</style>
+
+<script type="text/javascript">
+window.onload= function(){
+
+	var start= document.getElementById("start");
+	var begin= document.getElementById("begin");
+	var rawX, rangeX, adjustX, intX; // Random int for X
+	var rawY, rangeY, adjustY, intY; // Random int for Y
+	
+	var block = document.getElementById("block"); // Red block
+	var hits = document.getElementById("hits"); // Hit ID
+	var nhits = 0; // Number of hits
+	
+	var points=0; // Points
+	
+	// What happens when you click the START button
+	start.onclick= function() {
+		start.style.display="none"; // Hide the button
+		
+		// Random X integer (For location)
+		rawX = Math.random(); // Creates a random number between 0 and 1
+		rangeX = 850; // Ultimately the range from 0 to this number
+		adjustX = (rawX * rangeX);
+		intX = Math.ceil(adjustX); // Rounds up
+		
+		// Random Y integer (For location)
+		rawY = Math.random(); // Creates a random number between 0 and 1
+		rangeY = 550; // Ultimately the range from 0 to this number
+		adjustY = (rawY * rangeY);
+		intY = Math.ceil(adjustY); // Rounds up
+		
+		// Show the div in new location
+		block.style.visibility = 'visible';
+		block.style.position = 'relative';
+		document.getElementById("block").style.left=intX+"px";
+		document.getElementById("block").style.top=intY+"px";
+		
+		
+	}
+	
+	block.onclick= function() {
+	
+		// Random X integer (For location)
+		rawX = Math.random(); // Creates a random number between 0 and 1
+		rangeX = 850; // Ultimately the range from 0 to this number
+		adjustX = (rawX * rangeX);
+		intX = Math.ceil(adjustX); // Rounds up
+		
+		// Random Y integer (For location)
+		rawY = Math.random(); // Creates a random number between 0 and 1
+		rangeY = 550; // Ultimately the range from 0 to this number
+		adjustY = (rawY * rangeY);
+		intY = Math.ceil(adjustY); // Rounds up
+
+		// Show the div in new location
+		block.style.visibility = 'visible';
+		block.style.position = 'relative';
+		document.getElementById("block").style.left=intX+"px";
+		document.getElementById("block").style.top=intY+"px";
+	}	
+	
+	var moveRight=1;
+	var moveDown=1;
+		
+	function move_it() {	
+		if (moveRight) { // Since moveRight is 1, this code will run
+			intX = intX+1; // Increase the X position by 1px
+			document.getElementById("block").style.left=intX+"px"; // Update the 'Left:'
+			if (intX > 850){ // If it hits the right wall
+				moveRight=0; // Set moveRight to 0 so it will move left
+				nhits++; // Update number of hits on the wall
+				hits.innerHTML = "<center>" + nhits + "<br />Hits</center>";
+				}
+			} else { // Since moveRight is 0, this code will run
+			intX = intX-1; // Decrease the X position by 1px
+			document.getElementById("block").style.left=intX+"px"; // Update the 'Left:'
+			if (intX < 0){ // If it hits the left wall
+				moveRight=1; // Set moveRight to 1 so it will move right
+				nhits++; // Update the number of hits on the wall
+				hits.innerHTML = "<center>" + nhits + "<br />Hits</center>";
+				}
+			}
+		if (moveDown) { // moveDown is 1, so this code will run
+			intY = intY+1; // Increase the Y position by 1px - will push block down
+			document.getElementById("block").style.top=intY+"px"; // Update the 'Top:'
+			if (intY > 550){ // If the block hits the bottom wall
+				moveDown=0; // Set moveDown to 0 so it will now move up
+				nhits++; // Update the number of hits on the wall
+				hits.innerHTML = "<center>" + nhits + "<br />Hits</center>";
+				}
+			} else { // moveDown is 0, so this code will run
+			intY = intY-1; // Decrease the Y position by 1px - will push block up
+			document.getElementById("block").style.top=intY+"px"; // Update the 'Top:'
+			if (intY < 0){ // If the block hits the top wall
+				moveDown=1; // Set moveDown to 1 so it will now move down
+				nhits++; // Update the number of hits on the wall
+				hits.innerHTML = "<center>" + nhits + "<br />Hits</center>";
+				}
+			}
+	}
+	
+	intervalId=setInterval(move_it,10) // Run move_it function every 10 milliseconds
+		
+	
+}
+</script>
+</head>
+<body>
+<center>
+<h2>Paul Burgwardt</h2>
+<h3>Project 1 &bull; Random Box Movement</h3>
+</center>
+	<div class="contain">
+		<div id="block">
+			<div class="red">
+				<div id="hits"></div>
+			</div>
+		</div>
+		<div id="begin">
+			<center><input type="submit" id="start" value="START"></center>
+		</div>
+	</div>
+<center>
+<br />
+This project uses the setInterval and Math.random functions to move a block and reverse directions when hitting the appropriate wall,
+<br />
+all while recording the number of times a wall is hit and recording it on the block.
+</center>
+</body>
+</html>

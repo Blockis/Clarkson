@@ -1,0 +1,41 @@
+<!DOCTYPE HTML>
+<html><head>
+
+<style type="text/css">
+div.rect1{position:absolute; left:30px; top:40px; width:300px; height:240px;background-color:#ccbbaa;
+margin-bottom: 14px; padding: 6px;}
+</style>
+<script type="text/javascript">
+window.onload= function(){
+
+ var Numbers = [ 1, 2, 3, 4, 5 ];
+
+ var button= document.getElementById("B1");
+ var show= document.getElementById("show");
+ var sum=0;
+ var msg="";
+ button.onclick=function(){
+      Numbers.forEach(
+          function(num){
+             sum+=num;
+          }
+      )
+      msg="Sum: " + sum + "<br />Average: " + sum/Numbers.length;
+      show.innerHTML=msg;
+	  
+	 
+
+  } // end button
+
+}   // end onload
+
+</script>
+</head>
+<body>
+ <input type="button" value="Button" id="B1">
+<br/><br/>
+<div class="rect1" id="show">
+
+
+</body>
+</html>
