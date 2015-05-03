@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>COMM442 Project :: div Generator</title>
+		<link rel="stylesheet" href="style.css">
+		<script type="text/javascript" src="jscolor/jscolor.js"></script>
+	</head>
+	<body>
+	<div style="width: 600px; float: left; padding: 20px;">
+		<h1>div Generator</h1>
+		
+		<h3>Fill out the desired attributes for your div!</h3>
+		<div style="width: 420px; float: left; margin-left: 20px;">
+			<form action="create.cgi" method="post">
+				<label>Class Name: </label><input type="text" name="class"><br />
+				<label>Background Color: </label><input type="text" name="background_color" class="color"><br />
+				<label>Background Image: </label><input type="text" name="background_image"><br />
+				<label>Opacity (<= 1): </label><input type="text" name="opacity"><br />
+				<label>Font Color (white, #000000, etc):  </label><input type="text" name="font_color"><br />
+				<label>Font Weight (normal, bold, light):  </label><input type="text" name="font_weight"><br />
+				<label>Font Size (include px, em, etc):  </label><input type="text" name="font_size"><br />
+				<br />
+				<a href="../../ind_proj.html">Return To Overview</a>
+				<input type="submit" value="Create!" style="float: right; margin-right: 10px; width: 170px;">
+			</form>
+		</div>
+	</div>
+	</body>
+</html>

@@ -1,0 +1,9 @@
+a, a:visited, a:hover, a:active
+{
+	color: #3399FF;
+	text-decoration: none;
+}
+
+label { display: block; float: left; width:240px; margin-bottom: 8px; border-bottom: 1px dotted gray; padding-top: 2px; }
+
+input { float: left; margin-bottom: 10px; }

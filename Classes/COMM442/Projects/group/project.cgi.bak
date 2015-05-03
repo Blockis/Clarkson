@@ -1,0 +1,75 @@
+#!/usr/bin/perl 
+
+require ("mylib.pl");
+use CGI;
+use CGI::Carp qw ( fatalsToBrowser );
+$CGI::POST_MAX = 1024 * 4000;    # 4MB
+
+my $ext, $path, $success="", $select="";
+my $upload_dir = "uploads/";
+my $query = new CGI;
+
+######## process filename
+my $filename = $query->param("upload_file");  # In tag: name="upload_file";
+
+if (!$filename){
+$select="Select a file for upload.";
+&print_screen;
+exit;
+}
+
+$filename =~ /(.*)(\.\w*$)/;
+$filename = $1;
+$ext = $2;
+$filename =~ s/\W//g;        #security!
+$ext = lc($ext);
+$ext =~ s/php/txt/i;          #SECURITY!
+$filename = $filename . $ext ;
+
+
+
+########  Create file handle and  write to directory (path)
+
+my $upload_filehandle = $query->upload("upload_file"); #Named "upload_file" in the input tag
+
+$path = "$upload_dir/$filename";
+
+open ( UPLOADFILE, ">$path") or &webdie ("Can't upload $path: $!");
+# binmode UPLOADFILE;      Not necessary for Linux   
+while ( <$upload_filehandle> ){
+print UPLOADFILE;
+}
+close UPLOADFILE;
+$success = "Successfully uploaded: <em>$filename</em>\n";
+
+
+&print_screen;
+##############################  End Main ############################
+
+
+
+sub print_screen{
+&begin_html("upload");
+
+print <<EOT;
+
+</header>
+<body>
+<h3> Upload </h3>
+
+
+<form enctype="multipart/form-data" action="project.cgi" method="post">
+
+$select <br><br>
+
+<input name="upload_file" type="file">
+<input type="submit" value="Upload File" name="upload_button">
+</form>
+<br> 
+<p>$success</p>
+<img src= "$path"> 
+</body>
+</html>
+EOT
+exit;
+}
