@@ -1,0 +1,162 @@
+--	Paul Burgwardt
+--	Ryan Parece
+
+--	Formal Methods
+--	CS458
+
+--	Traffic Light
+--	We have created a model of a four-way intersection with a traffic light, written in NuSMV.
+--
+--	We are assuming that opposite lanes will maintain the same state,
+--		where as lanes N and S will be the same state, and W and E will be the same state.
+--
+-- We have implemented a pedestrian crossing feature. This allows a pedestrian to be randomly generated.
+--		Once generated, the pedestrian will be in a 'waiting' state, until both lanes are 'red'.
+--		Once both are in the red state, a pedestrian will randomly choose to walk either in the NS or EW direction
+--
+-- We have implemented proper error checking to make sure our model is balanced, 
+-- 		and that no catastrophic events will occur (e.g. a pedestrian walking across active / moving traffic).
+--
+
+
+--
+-- We have included a picture of our model below:	
+--
+--				|	N	|
+--	____________|		|____________
+--					
+--	W 				x				E
+--	____________		 ____________
+--				|		|
+--				|	S	|
+--
+--
+
+
+MODULE main
+-- Module Name
+
+VAR
+-- Declare Variables
+
+	--	North/South Lane Lights.
+	--	Possible States: red, green, yellow
+    NS	:	{red, yellow, green};
+
+	--	East/West Lane Lights.
+	--	Possible States: red, green, yellow
+	EW	:	{red, yellow, green};
+
+	--	Signal A Light Change
+	-- 	Will choose one depending on the current state of the lights
+	changeLight	:	{signalNS, signalEW};
+
+	--	Possible pedestrian states
+	pedestrian 		:	{notPresent, waiting, walkingAcrossNS, walkingAcrossEW};
+
+ASSIGN
+	--	Initialize both lights to red
+ 	init(NS)	:=	red;
+	init(EW)	:=	red;
+
+	--	Initialize pedestrian
+	init(pedestrian)	:= notPresent;
+	
+	--	Change Light To NS (Randomly signal to NS or EW  direction to go green)
+	init(changeLight)	:=	{signalNS, signalEW};
+	
+	--	State AFTER NS
+	next(NS)	:=	case
+						--	If no pedestrians, and all lights red, go green
+						NS = red & EW = red & changeLight = signalNS & pedestrian = notPresent	:	green;
+						--	If pedestrian is waiting and all lights red, stay red
+						NS = red & EW = red & pedestrian = waiting	:	red;
+						--	If pedestrian is crossing and all lights red, stay red
+						NS = red & EW = red & (pedestrian = walkingAcrossNS | pedestrian = walkingAcrossEW)	:	red;
+						--	If NS==green, set NS to yellow
+						NS = green	:	yellow;
+						--	If NS==yellow, set NS to red
+						NS = yellow	:	red;
+
+						TRUE	:	red;
+	          		esac;
+					
+	--	State AFTER EW
+	next(EW)	:=	case
+						--	If both lights red, and changeLight==ew, set EW to green
+						EW = red & NS = red & changeLight = signalEW & pedestrian = notPresent	:	green;
+						--	If pedestrian is waiting and all lights red, stay red
+						NS = red & NS = red & pedestrian = waiting	:	red;
+						--	If pedestrian is crossing and all lights red, stay red
+						NS = red & NS = red & (pedestrian = walkingAcrossNS | pedestrian = walkingAcrossEW)	:	red;
+						--	If EW==green, set EW to yellow
+						EW = green	:	yellow;
+						--	If EW==yellow, set EW to red
+						EW = yellow	:	red;
+
+						TRUE	:	red;
+					esac;
+					
+	--	Change light function, which allows the direction of traffic flow to change after one light cycle has ended (only if a pedestrian is not present).
+	next(changeLight)	:=	case
+						changeLight = signalNS & NS = yellow & pedestrian = notPresent	:	signalEW;
+						changeLight = signalEW & EW = yellow & pedestrian = notPresent	:	signalNS;
+			
+						TRUE	:	changeLight;
+					esac;
+
+	--	State AFTER activating pedestrianWalking
+	next(pedestrian)	:=	case
+						--	If no pedestrian, randomly decide to make one or not
+						pedestrian = notPresent	:	{notPresent, waiting};
+						--	If pedestrian is waiting to cross, then randomly decide a direction to walk
+						pedestrian = waiting & NS = red & EW = red	:	{walkingAcrossNS, walkingAcrossEW};
+						--	If pedestrian has walked across a lane, and the lights are both still red, at the next state make the pedestrian not active
+						(pedestrian = walkingAcrossNS | pedestrian = walkingAcrossEW) & NS = red & EW = red	:	notPresent;
+
+						--	Default case where there is no pedestrian active
+						TRUE	:	notPresent;
+					esac;
+
+--	Specifications for verifying the model
+
+
+SPEC
+	AG( !( ( NS = green | NS = yellow ) & ( EW = green | EW = yellow ) ) );
+	--	For all globally, there isn't a state where (NS is green or yellow) AND (EW is green or yellow)
+
+SPEC
+	EF( NS = red & EW = red );
+	--	There exists finally a state where NS is red AND EW is red
+
+SPEC
+    EF( NS = green );
+	--	There exists finally a state where NS is green
+
+SPEC
+    EF( EW = green );
+	--	There exists finally a state where EW is green
+	
+SPEC
+	EF(pedestrian = walkingAcrossEW | pedestrian = walkingAcrossNS);
+	-- there exists finally a state where a pedestrian will be walking across either the NS or EW direction
+	
+SPEC 
+	AG( (pedestrian = waiting) -> AG EF(pedestrian = walkingAcrossEW | pedestrian = walkingAcrossNS) )
+	-- for all globally, if a pedestrian is waiting to cross, then for all globally states after, there exists a 
+	-- state finally where a pedestrian will be walking across either the NS or EW direction
+	
+SPEC
+	EF(  (NS = red & EW = red) & (((pedestrian = walkingAcrossNS |  pedestrian = walkingAcrossEW) | pedestrian = notPresent )) );
+	-- There exists a state finally, where BOTH (NS and EW) lights are red AND either there is a pedestrian is walking, or there is no pedestrian active
+	
+SPEC
+	AG( ( NS = green | NS = yellow | NS = red ) & (pedestrian = notPresent | pedestrian = waiting | pedestrian = walkingAcrossEW | pedestrian = walkingAcrossNS) );
+	--	For all globally, there is a state where (NS is green or yellow) AND a pedestrian is either not active, waiting to cross, or crossing in either the (NS or EW) direction 
+	
+SPEC
+	AG( ( ( EW = green | EW = yellow | EW = red ) & (pedestrian = notPresent | pedestrian = waiting | pedestrian = walkingAcrossEW | pedestrian = walkingAcrossNS) ) );
+	--	For all globally, there is a state where (EW is green or yellow) AND a pedestrian is either not active, waiting to cross, or crossing in either the (NS or EW) direction 
+	
+	
+	

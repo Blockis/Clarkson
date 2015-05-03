@@ -1,0 +1,41 @@
+*** This is NuSMV 2.5.4 (compiled on Fri Oct 28 14:13:29 UTC 2011)
+*** Enabled addons are: compass
+*** For more information on NuSMV see <http://nusmv.fbk.eu>
+*** or email to <nusmv-users@list.fbk.eu>.
+*** Please report bugs to <nusmv-users@fbk.eu>
+
+*** Copyright (c) 2010, Fondazione Bruno Kessler
+
+*** This version of NuSMV is linked to the CUDD library version 2.4.1
+*** Copyright (c) 1995-2004, Regents of the University of Colorado
+
+*** This version of NuSMV is linked to the MiniSat SAT solver.
+*** See http://www.cs.chalmers.se/Cs/Research/FormalMethods/MiniSat
+*** Copyright (c) 2003-2005, Niklas Een, Niklas Sorensson
+
+NuSMV > read_model -i C:\Users\Paul\Desktop\TrafficLight3-0.smv
+NuSMV > flatten_hierarchy
+NuSMV > encode_variables
+NuSMV > build_model
+NuSMV > pick_state -r
+NuSMV > process_model
+The computation of reachable states has been completed.
+The diameter of the FSM is 5.
+-- specification AG !((NS = green | NS = yellow) & (EW = green | EW = yellow))
+is true
+-- specification EF (NS = red & EW = red)  is true
+-- specification EF NS = green  is true
+-- specification EF EW = green  is true
+-- specification EF (pedestrian = walkingAcrossEW | pedestrian = walkingAcrossNS
+)  is true
+-- specification AG (pedestrian = waiting -> AG (EF (pedestrian = walkingAcrossE
+W | pedestrian = walkingAcrossNS)))  is true
+-- specification EF ((NS = red & EW = red) & ((pedestrian = walkingAcrossNS | pe
+destrian = walkingAcrossEW) | pedestrian = notPresent))  is true
+-- specification AG (((NS = green | NS = yellow) | NS = red) & (((pedestrian = n
+otPresent | pedestrian = waiting) | pedestrian = walkingAcrossEW) | pedestrian =
+ walkingAcrossNS))  is true
+-- specification AG (((EW = green | EW = yellow) | EW = red) & (((pedestrian = n
+otPresent | pedestrian = waiting) | pedestrian = walkingAcrossEW) | pedestrian =
+ walkingAcrossNS))  is true
+NuSMV >
