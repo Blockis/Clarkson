@@ -1,0 +1,11 @@
+Notes :: 1/13/2015
+
+Divide and Conquer
+	[ 1 2 3 4 ... N/2 | N/2+1 ... N]
+		min1				min2	 (Compare for min)
+		max1				max2	 (Compare for max)
+
+	Base Cases:
+		N = 1
+		N = 2
+		1

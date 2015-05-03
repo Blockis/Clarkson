@@ -1,0 +1,88 @@
+Solving Recurrence Relations
+
+log.b(y) = X <=> y = b^x
+
+Master Theorem:
+
+Substitution Method:
+
+
+-----------------------------------------------------------------------
+Ti(1) = 1, for each i.
+• T1(N) = 2T1(N/2) + 4N.
+• T2(N)=T2(N−1)+2N.
+• T3(N)=T3(N−1)+logN.
+
+T1, use the Master Theorem.
+	T1(N) = 0(NlogN)
+T2, use the Substitution Method.
+	For T2(N) = T2(N-1) + 2N, we guess T2(N) <= N(N+1).
+	Verify: T2(N) = T2(N-1) + 2N <= (N-1)N + 2N = N^2 - N + 2N = N^2
+	T2(N) = O(N^2)
+T3, use the Substitution Method.
+	For T3(N) = T3(N-1) + logN, we guess T3(N) <= log(N!).
+	Verify: T3(N) = T3(N-1) + logN <= log((N-1)!) + logN = log(N!)
+	Since log(a+b) = log(a) + log(b), and N! = N*(N-1)!
+	T3(N) = O(NlogN)
+
+Analysis:
+	A1 is no worse than the other algorithms - TRUE
+	A2 is the worst algorithm - TRUE
+	A3 is strictly better than A1 - FALSE
+	A3 has the same cost as sorting using Merge Sort - TRUE
+	A2 has the same cost as sorting using Insertion Sort - TRUE
+-----------------------------------------------------------------------
+Ti(1) = 1, for each i.
+• T1(N) = 3T1(N/4) + 2^(log.2(N)).
+• T2(N) = T2(N/2) + N^(2+(1/log.2(N)).
+• T3(N) = T3(N − 1) + log.2(2N).
+
+T1, use the Master Theorem.
+	T1(N) = 3T1(N/4) + 2^(log.2(N)) = 3T1(N/4) + N
+	T1(N) = 0(N)
+T2, use the Master Theorem.
+	T2(N) = T2(N/2) + N^(2+(1/log.2(N)) = T2(N/2) + 2N^2
+	T2(N) = 0(N^2)
+T3, use the Substitution Method.
+	T3(N) = T3(N − 1) + log.2(2N) = T3(N − 1) + log2 N + 1
+		T3(N) = T3(N - 1) + log.2(N) + 1
+					   N-2
+			  = T3(1) + E(log.2(N - j) + 1)
+			  		   j=0
+			  = 1 + log.2(N!) + (N - 1)
+	T3(N) = O(Nlog.2(N)
+
+Analysis:
+	A1 is no worse than the other algorithms - TRUE
+	A2 is the worst algorithm - TRUE
+	A3 is strictly better than A1 - FALSE
+	A3 has the same cost as sorting using Merge Sort - TRUE
+	A2 has the same cost as sorting using Insertion Sort - TRUE
+
+-----------------------------------------------------------------------
+Ti(1) = 1, for each i.
+• T1(N) = 2T1(N/4) + 2^(log.2(N)).
+• T2(N) = T2(N/2) + N^(1+(1/log.2(N)).
+• T3(N) = T3(N − 1) + log.2(N^3).
+
+T1, use the Master Theorem.
+	T1(N) = 2T1(N/4) + 2^(log.2(N)) = 2T1(N/4) + N
+	T1(N) = 0(N)
+T2, use the Master Theorem.
+	T2(N) = T2(N/2) + N^(1+(1/log.2(N)) = T2(N/2) + 2N
+	T2(N) = 0(N)
+T3, use the Substitution Method.
+	T3(N) = T3(N − 1) + log.2(N^3) = T3(N − 1) + 3log2(N)
+		T3(N) = T3(N - 1) + 3log.2(N)
+					   N-1
+			  = T3(1) + E(3log.2(N - j) + 1)
+			  		   j=0
+			  = 1 + 3log.2(N!)
+	T3(N) = O(Nlog.2(N)
+
+Analysis:
+	A1 is no worse than the other algorithms - TRUE
+	A2 is the worst algorithm - FALSE
+	A3 is strictly better than A1 - FALSE
+	A3 has the same cost as sorting using Merge Sort - TRUE
+	A2 has the same cost as sorting using Insertion Sort - FALSE

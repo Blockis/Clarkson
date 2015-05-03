@@ -1,0 +1,36 @@
+A3 Graphs out soon
+Take-Home Quiz
+In-Class Quiz
+
+Final Exam, Tue 4/28? 7-10PM
+
+
+
+GRAPHS
+G = (V, E) [ Vertex set, Edge set ]
+
+Representation
+	adjacency list
+		[a] -> [e] -> [g]
+		...
+	adjacency matrix (row, column)
+		  a b c
+		a 0 1 0
+		b 1 0 1
+		c 0 1 0
+	directed: arrow indicates direction
+	undirected: both ways of direction
+
+G has n vertices and m edges
+Space complexity adj list = 0(n + m)
+Space complexity adj matrix = 0(n^2) because you use display vertices vs vertices
+
+Sink: a vertex with no out-going edges
+	0(n) if searching for sink using adj list
+	0(n^2) if searching for sink using adj matrix
+
+Connectivity: Two vertices are disconnected if there is no path connecting them
+
+Strongly connected: there is a path connecting any pair of vertices
+
+Connected component: a subgraph that is strongly connected

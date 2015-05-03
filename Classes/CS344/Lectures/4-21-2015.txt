@@ -1,0 +1,11 @@
+Office Hours moved to Wed, Fri
+
+Homeworks due end of dead week or day after final exam
+
+
+Final Exam Topics
+-------------------
+Chapters 1-5 (Text)
+Chapter 11,22,24.3,3,4 (Course Reserve) Dijkstra's Algorithm
+AVL/Splay/BST
+Skip Lists (Deterministic)

@@ -1,0 +1,25 @@
+Asymptotic Functions
+
+1.  (sqrt(8))^logn = n^(log(sqrt(8))) = n^(3/2)
+2.  n^(1+(1/logn)) = n * n^(1/logn) = O(n) since n^(1/logn) = O(1)
+3.  (2/3)^n = O(1) since (2/3)^n tends to 0 as n goes to infinity
+4.  n^(3/2)
+5.  (logn)^(3/2)
+6.  log((2n)!) ~ (2n)log(2n) = 0(nlogn)
+7.  n^(2/logn) = (n^(1/logn))^2 = O(1) since n^(1/logn) = O(1)
+8.  logsqrt(logn) = O(loglogn) since log(a^b) = bloga
+9.  (2^n)/n
+10. n^(loglogn) = 2^(lognloglogn) since n=2^logn
+11. log(sqrt(n)) = O(logn) since log(a^b) = bloga
+12. 13 = O(1)
+13. (logn)^logn = 2^(loglognlogn) since logn = 2^(loglogn)
+14. sqrt(2)^n = 2^(n/2)
+15. (2n)!
+16. sqrt(logn)
+17. n^(1/1000)
+18. 2^sqrt(n)
+19. nlog(sqrt(n)) = O(nlogn) since log(a^b) = bloga
+20. loglogn
+
+ORDERING:
+3,7=12,8=20,16,11,5,17,2,6=19,1=4,10=13,18,14,9,15

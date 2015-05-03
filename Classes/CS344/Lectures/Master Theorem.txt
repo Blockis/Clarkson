@@ -1,0 +1,21 @@
+Master Theorem
+
+Let
+	a >= 1
+	b > 1
+	f(n) = function
+
+T(n) = aT(n/b) + f(n)
+
+Case:
+	If f(n) == O(n^logb(a))
+	If f(n) = 
+	If f(n) = 
+
+
+T(n) = 7T(n/2) + n^2
+	a = 7
+	b = 2
+	f(n) = n^2
+
+	Answer: n^log2(7)
